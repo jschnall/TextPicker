@@ -1,4 +1,4 @@
-package com.example.customviews
+package com.sporksoft.customviews
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

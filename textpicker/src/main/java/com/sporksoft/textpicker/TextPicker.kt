@@ -1,15 +1,12 @@
-package com.example.customviews
+package com.sporksoft.customviews
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
-import android.view.View
-import android.widget.TextView
 
 class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0, items: List<String> = emptyList(), var divider: Drawable? = null): RecyclerView(context, attrs, defStyle) {
     interface OnValueChangeListener {

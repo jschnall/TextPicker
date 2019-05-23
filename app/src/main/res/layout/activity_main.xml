@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-    <com.example.customviews.TextPicker
+    <com.sporksoft.customviews.TextPicker
         android:id="@+id/picker"
         android:layout_width="128dp"
         android:layout_height="128dp"

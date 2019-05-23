@@ -1,4 +1,4 @@
-package com.example.customviews
+package com.sporksoft.customviews
 
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
+import com.sporksoft.textpicker.R
 
 
 class TextAdapter(val layoutId: Int = R.layout.item_text, val viewId: Int = R.id.text, var items: List<String> = emptyList(), val layoutManager: LinearLayoutManager, val listeners: MutableSet<TextPicker.OnValueChangeListener>): RecyclerView.Adapter<TextAdapter.ViewHolder>() {

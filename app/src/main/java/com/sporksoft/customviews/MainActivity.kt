@@ -1,11 +1,10 @@
-package com.example.customviews
+package com.sporksoft.customviews
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import android.view.View
-import android.widget.TextView
 import android.widget.Toast
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
-        picker = findViewById(R.id.picker)
+        picker = findViewById<TextPicker>(R.id.picker)
         picker.divider = getDrawable(R.drawable.divider)
         picker.addOnValueChangeListener(object : TextPicker.OnValueChangeListener {
             override fun onValueChange(textPicker: TextPicker, value: String, index: Int) {

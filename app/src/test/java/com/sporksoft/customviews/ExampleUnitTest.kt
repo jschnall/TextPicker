@@ -1,4 +1,4 @@
-package com.example.customviews
+package com.sporksoft.customviews
 
 import org.junit.Test
 
