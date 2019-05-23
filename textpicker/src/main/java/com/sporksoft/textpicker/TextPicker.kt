@@ -15,8 +15,9 @@ class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 
         fun onValueChange(textPicker: TextPicker, value: String, index: Int)
     }
     val onValueChangeListeners = mutableSetOf<OnValueChangeListener>()
-    var value: String? = null
     var listAdapter: TextAdapter
+    var value: String? = null
+    var index: Int = -1
 
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
@@ -35,10 +36,10 @@ class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 
         super.onScrollStateChanged(state)
         if (SCROLL_STATE_IDLE == state) {
             with (layoutManager as LinearLayoutManager) {
-                val position = this.findFirstVisibleItemPosition() + 1
-                value = listAdapter.items[position]
+                index = this.findFirstCompletelyVisibleItemPosition()
+                value = listAdapter.items[index]
                 onValueChangeListeners.forEach {
-                    it.onValueChange(this@TextPicker, listAdapter.items[position], position)
+                    it.onValueChange(this@TextPicker, listAdapter.items[index], index)
                 }
             }
         }
@@ -48,7 +49,13 @@ class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 
         listAdapter.items = items
         listAdapter.notifyDataSetChanged()
         scrollToPosition(0)
-        value = if (items.isEmpty()) null else items[0]
+        if (items.isEmpty()) {
+            index = -1
+            value = null
+        } else {
+            index = 0
+            value = items[0]
+        }
     }
 
     fun getItems(): List<String> {
