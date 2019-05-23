@@ -4,7 +4,7 @@ A simple easily customizable replacement for NumberPicker, which can display str
 ## Add to Project
 ```
 dependencies {
-  compile 'com.sporksoft.textpicker:textpicker:0.1.0'
+  implementation 'com.sporksoft.textpicker:textpicker:0.1.0'
 }
 ```
 
