@@ -13,14 +13,18 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.navigation_home -> {
                 picker.setItems(listOf("Sphinx cat", "Honey badger", "Orangutan", "Burmese python"))
+                Toast.makeText(this, picker.value, Toast.LENGTH_SHORT).show()
+
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
                 picker.setItems(listOf("One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"))
+                Toast.makeText(this, picker.value, Toast.LENGTH_SHORT).show()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
                 picker.setItems(listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"))
+                Toast.makeText(this, picker.value, Toast.LENGTH_SHORT).show()
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -39,6 +43,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, value, Toast.LENGTH_SHORT).show()
             }
         })
+
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
 }

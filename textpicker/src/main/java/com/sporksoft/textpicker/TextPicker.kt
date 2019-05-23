@@ -7,12 +7,15 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
+import com.sporksoft.textpicker.R
 
-class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0, items: List<String> = emptyList(), var divider: Drawable? = null): RecyclerView(context, attrs, defStyle) {
+class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0, items: List<String> = emptyList(),
+                 var divider: Drawable? = context.getDrawable(R.drawable.tp_divider)): RecyclerView(context, attrs, defStyle) {
     interface OnValueChangeListener {
         fun onValueChange(textPicker: TextPicker, value: String, index: Int)
     }
     val onValueChangeListeners = mutableSetOf<OnValueChangeListener>()
+    var value: String? = null
     var listAdapter: TextAdapter
 
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -33,6 +36,7 @@ class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 
         if (SCROLL_STATE_IDLE == state) {
             with (layoutManager as LinearLayoutManager) {
                 val position = this.findFirstVisibleItemPosition() + 1
+                value = listAdapter.items[position]
                 onValueChangeListeners.forEach {
                     it.onValueChange(this@TextPicker, listAdapter.items[position], position)
                 }
@@ -43,6 +47,8 @@ class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 
     fun setItems(items: List<String>) {
         listAdapter.items = items
         listAdapter.notifyDataSetChanged()
+        scrollToPosition(0)
+        value = if (items.isEmpty()) null else items[0]
     }
 
     fun getItems(): List<String> {

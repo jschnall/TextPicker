@@ -36,8 +36,10 @@ class TextAdapter(val layoutId: Int = R.layout.item_text, val viewId: Int = R.id
             holder.textView.text = items[position - 1]
             holder.itemView.setOnClickListener {
                 layoutManager.scrollToPositionWithOffset(position - 1, 0)
+                val textPicker = holder.itemView.parent as TextPicker
+                textPicker.value = items[position - 1]
                 listeners.forEach {
-                    it.onValueChange(holder.itemView.parent as TextPicker, items[position - 1], position - 1)
+                    it.onValueChange(textPicker, items[position - 1], position - 1)
                 }
 
             }
