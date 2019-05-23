@@ -9,7 +9,7 @@ import android.widget.TextView
 
 
 
-class TextAdapter(val layoutId: Int = R.layout.item_text, val viewId: Int = R.id.text, var items: List<String> = emptyList(), val layoutManager: LinearLayoutManager): RecyclerView.Adapter<TextAdapter.ViewHolder>() {
+class TextAdapter(val layoutId: Int = R.layout.item_text, val viewId: Int = R.id.text, var items: List<String> = emptyList(), val layoutManager: LinearLayoutManager, val listeners: MutableSet<TextPicker.OnValueChangeListener>): RecyclerView.Adapter<TextAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textView: TextView = view.findViewById(R.id.text)
     }
@@ -36,6 +36,10 @@ class TextAdapter(val layoutId: Int = R.layout.item_text, val viewId: Int = R.id
             holder.textView.text = items[position - 1]
             holder.itemView.setOnClickListener {
                 layoutManager.scrollToPositionWithOffset(position - 1, 0)
+                listeners.forEach {
+                    it.onValueChange(holder.itemView.parent as TextPicker, items[position - 1], position - 1)
+                }
+
             }
         }
     }

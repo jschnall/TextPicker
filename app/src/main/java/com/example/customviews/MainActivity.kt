@@ -5,6 +5,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +35,11 @@ class MainActivity : AppCompatActivity() {
 
         picker = findViewById(R.id.picker)
         picker.divider = getDrawable(R.drawable.divider)
+        picker.addOnValueChangeListener(object : TextPicker.OnValueChangeListener {
+            override fun onValueChange(textPicker: TextPicker, value: String, index: Int) {
+                Toast.makeText(this@MainActivity, value, Toast.LENGTH_SHORT).show()
+            }
+        })
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
 }
