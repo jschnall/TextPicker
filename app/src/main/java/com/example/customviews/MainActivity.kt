@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                picker.setItems(listOf("Cat", "Dog"))
+                picker.setItems(listOf("Sphinx cat", "Honey badger", "Orangutan", "Burmese python"))
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
