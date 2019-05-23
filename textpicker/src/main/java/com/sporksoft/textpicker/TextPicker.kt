@@ -14,10 +14,21 @@ class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 
     interface OnValueChangeListener {
         fun onValueChange(textPicker: TextPicker, value: String, index: Int)
     }
-    val onValueChangeListeners = mutableSetOf<OnValueChangeListener>()
+    private val onValueChangeListeners = mutableSetOf<OnValueChangeListener>()
     var listAdapter: TextAdapter
-    var value: String? = null
-    var index: Int = -1
+
+    internal var _value: String? = null
+    val value: String?
+        get() = _value
+
+    internal var _index: Int = -1
+    var index: Int
+        get() = _index
+        set(position) {
+            _index = position
+            _value = listAdapter.items[index]
+            scrollToPosition(position +  2)
+        }
 
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
@@ -36,10 +47,10 @@ class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 
         super.onScrollStateChanged(state)
         if (SCROLL_STATE_IDLE == state) {
             with (layoutManager as LinearLayoutManager) {
-                index = this.findFirstCompletelyVisibleItemPosition()
-                value = listAdapter.items[index]
+                _index = this.findFirstCompletelyVisibleItemPosition()
+                _value = listAdapter.items[_index]
                 onValueChangeListeners.forEach {
-                    it.onValueChange(this@TextPicker, listAdapter.items[index], index)
+                    it.onValueChange(this@TextPicker, listAdapter.items[_index], _index)
                 }
             }
         }
@@ -50,11 +61,11 @@ class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 
         listAdapter.notifyDataSetChanged()
         scrollToPosition(0)
         if (items.isEmpty()) {
-            index = -1
-            value = null
+            _index = -1
+            _value = null
         } else {
-            index = 0
-            value = items[0]
+            _index = 0
+            _value = items[0]
         }
     }
 
