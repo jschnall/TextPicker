@@ -3,6 +3,7 @@ package com.sporksoft.customviews
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
@@ -83,12 +84,12 @@ class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        val y = (canvas.height / 3)
+        val y = (height / 3)
 
         divider?.let {
-            it.setBounds(0, y, canvas.width, y + it.intrinsicHeight)
+            it.setBounds(0, y, width, y + it.intrinsicHeight)
             it.draw(canvas)
-            it.setBounds(0, 2 * y, canvas.width, 2 * y + (it.intrinsicHeight))
+            it.setBounds(0, 2 * y, width, 2 * y + (it.intrinsicHeight))
             it.draw(canvas)
         }
     }
