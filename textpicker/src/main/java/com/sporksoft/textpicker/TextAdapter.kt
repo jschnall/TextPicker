@@ -14,10 +14,7 @@ class TextAdapter(val layoutId: Int = R.layout.tp_item_text,
     internal var items: List<String> = emptyList()
     internal val listeners = mutableSetOf<TextPicker.OnValueChangeListener>()
     lateinit var layoutManager: LinearLayoutManager
-
-    internal fun setLayoutManager(linearLayoutManager: LinearLayoutManager) {
-        layoutManager = linearLayoutManager
-    }
+    lateinit var parent: TextPicker
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textView: TextView = view.findViewById(R.id.text)
@@ -44,15 +41,20 @@ class TextAdapter(val layoutId: Int = R.layout.tp_item_text,
         } else {
             holder.textView.text = items[position - 1]
             holder.itemView.setOnClickListener {
-                layoutManager.scrollToPositionWithOffset(position - 1, 0)
                 val textPicker = holder.itemView.parent as TextPicker
+                layoutManager.scrollToPositionWithOffset(position - 1, 0)
                 textPicker._index = position - 1
                 textPicker._value = items[position - 1]
                 listeners.forEach {
                     it.onValueChange(textPicker, items[position - 1], position - 1)
                 }
-
             }
         }
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        parent = recyclerView as TextPicker
+        layoutManager = parent.layoutManager as LinearLayoutManager
     }
 }

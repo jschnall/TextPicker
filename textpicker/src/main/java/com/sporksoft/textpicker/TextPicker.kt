@@ -35,9 +35,6 @@ class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 
         initAttributes(attrs)
         layoutManager = LinearLayoutManager(context)
         adapter = TextAdapter()
-        with (layoutManager as LinearLayoutManager) {
-            (adapter as TextAdapter).setLayoutManager(this)
-        }
         setHasFixedSize(true)
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(this)
@@ -106,7 +103,7 @@ class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 
 
     override fun setAdapter(newAdapter: Adapter<*>?) {
         if (newAdapter is TextAdapter) {
-           super.setAdapter(newAdapter)
+            setTextAdapter(newAdapter)
         } else {
             throw Exception("Adapter must be an instance of TextAdapter")
         }
