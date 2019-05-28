@@ -9,7 +9,16 @@ import android.widget.TextView
 import com.sporksoft.textpicker.R
 
 
-class TextAdapter(val layoutId: Int = R.layout.item_text, val viewId: Int = R.id.text, var items: List<String> = emptyList(), val layoutManager: LinearLayoutManager, val listeners: MutableSet<TextPicker.OnValueChangeListener>): RecyclerView.Adapter<TextAdapter.ViewHolder>() {
+class TextAdapter(val layoutId: Int = R.layout.tp_item_text,
+                  val viewId: Int = R.id.text): RecyclerView.Adapter<TextAdapter.ViewHolder>() {
+    internal var items: List<String> = emptyList()
+    internal val listeners = mutableSetOf<TextPicker.OnValueChangeListener>()
+    lateinit var layoutManager: LinearLayoutManager
+
+    internal fun setLayoutManager(linearLayoutManager: LinearLayoutManager) {
+        layoutManager = linearLayoutManager
+    }
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textView: TextView = view.findViewById(R.id.text)
     }

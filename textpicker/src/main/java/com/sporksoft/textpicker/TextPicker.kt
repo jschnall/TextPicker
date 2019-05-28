@@ -9,13 +9,12 @@ import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import com.sporksoft.textpicker.R
 
-class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0, items: List<String> = emptyList(),
-                 var divider: Drawable? = context.getDrawable(R.drawable.tp_divider)): RecyclerView(context, attrs, defStyle) {
+class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0): RecyclerView(context, attrs, defStyle) {
     interface OnValueChangeListener {
         fun onValueChange(textPicker: TextPicker, value: String, index: Int)
     }
-    private val onValueChangeListeners = mutableSetOf<OnValueChangeListener>()
-    var listAdapter: TextAdapter
+
+    var divider: Drawable? = context.getDrawable(R.drawable.tp_divider)
 
     internal var _value: String? = null
     val value: String?
@@ -26,39 +25,51 @@ class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 
         get() = _index
         set(position) {
             _index = position
-            _value = listAdapter.items[index]
+            _value = (adapter as TextAdapter).items[index]
             scrollToPosition(position +  2)
         }
 
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
     init {
+        initAttributes(attrs)
         layoutManager = LinearLayoutManager(context)
+        adapter = TextAdapter()
         with (layoutManager as LinearLayoutManager) {
-            listAdapter = TextAdapter(items = items, layoutManager = this, listeners = onValueChangeListeners)
+            (adapter as TextAdapter).setLayoutManager(this)
         }
-        adapter = listAdapter
         setHasFixedSize(true)
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(this)
+    }
+
+    private fun initAttributes(attributeSet: AttributeSet?) {
+        if (attributeSet == null) {
+            return
+        }
+        val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.TextPicker)
+        divider = typedArray.getDrawable(R.styleable.TextPicker_divider) ?: context.getDrawable(R.drawable.tp_divider)
+        typedArray.recycle()
     }
 
     override fun onScrollStateChanged(state: Int) {
         super.onScrollStateChanged(state)
         if (SCROLL_STATE_IDLE == state) {
             with (layoutManager as LinearLayoutManager) {
+                val textAdapter = adapter as TextAdapter
                 _index = this.findFirstCompletelyVisibleItemPosition()
-                _value = listAdapter.items[_index]
-                onValueChangeListeners.forEach {
-                    it.onValueChange(this@TextPicker, listAdapter.items[_index], _index)
+                _value = textAdapter.items[_index]
+                textAdapter.listeners.forEach {
+                    it.onValueChange(this@TextPicker, textAdapter.items[_index], _index)
                 }
             }
         }
     }
 
     fun setItems(items: List<String>) {
-        listAdapter.items = items
-        listAdapter.notifyDataSetChanged()
+        val textAdapter = adapter as TextAdapter
+        textAdapter.items = items
+        textAdapter.notifyDataSetChanged()
         scrollToPosition(0)
         if (items.isEmpty()) {
             _index = -1
@@ -70,7 +81,7 @@ class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 
     }
 
     fun getItems(): List<String> {
-        return listAdapter.items
+        return (adapter as TextAdapter).items
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -86,10 +97,22 @@ class TextPicker(context: Context, attrs: AttributeSet? = null, defStyle: Int = 
     }
 
     fun addOnValueChangeListener(listener: OnValueChangeListener): Boolean {
-        return onValueChangeListeners.add(listener)
+        return (adapter as TextAdapter).listeners.add(listener)
     }
 
     fun removeOnValueChangeListener(listener: OnValueChangeListener): Boolean {
-        return onValueChangeListeners.remove(listener)
+        return (adapter as TextAdapter).listeners.remove(listener)
+    }
+
+    override fun setAdapter(newAdapter: Adapter<*>?) {
+        if (newAdapter is TextAdapter) {
+           super.setAdapter(newAdapter)
+        } else {
+            throw Exception("Adapter must be an instance of TextAdapter")
+        }
+    }
+
+    fun setTextAdapter(newAdapter: TextAdapter) {
+        super.setAdapter(newAdapter)
     }
 }

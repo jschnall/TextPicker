@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                picker.setItems(listOf("Sphinx cat", "Honey badger", "Orangutan", "Burmese python"))
+                picker.setItems(listOf("Sphinx cat", "Honey badger", "Orangutan", "Burmese python", "Grizzly bear", "Great white shark", "Parastratiosphecomyia stratiosphecomyioides"))
                 Toast.makeText(this, "${picker.index}: ${picker.value}", Toast.LENGTH_SHORT).show()
                 return@OnNavigationItemSelectedListener true
             }
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
         picker = findViewById<TextPicker>(R.id.picker)
-        picker.divider = getDrawable(R.drawable.divider)
+        picker.setTextAdapter(TextAdapter(layoutId = R.layout.item_text))
         picker.addOnValueChangeListener(object : TextPicker.OnValueChangeListener {
             override fun onValueChange(textPicker: TextPicker, value: String, index: Int) {
                 Toast.makeText(this@MainActivity, "$index: $value", Toast.LENGTH_SHORT).show()
